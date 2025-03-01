@@ -28,7 +28,8 @@ const WebcamEmotion = ({ onEmotionDetect }) => {
 
   const detectEmotion = () => {
     if (webcamRef.current) {
-      const emotions = ["Happy 😀", "Neutral 😐", "Stressed 😟", "Sad 😢"];
+      const emotions = ["Happy 😀", "Neutral 😐", "Stressed 😟", "Sad 😢", "Fear 😨", "Scared 😱", "Anxious 🤯"];
+
       const detected = emotions[Math.floor(Math.random() * emotions.length)];
 
       setEmotion(detected);
@@ -43,8 +44,17 @@ const WebcamEmotion = ({ onEmotionDetect }) => {
       
       <div className="emotion-response">
         <p>Detected Emotion: <strong>{emotion}</strong></p>
-        {emotion === "Stressed 😟" && <p className="warning">Take a deep breath! You got this. 💪</p>}
-        {emotion === "Sad 😢" && <p className="warning">You're not alone. Stay strong! ❤️</p>}
+        {emotion === "Fear 😨" && <p className="warning">Fear is natural. Take deep breaths! 🧘</p>}
+{emotion === "Anxious 🤯" && <p className="warning">It's okay to feel overwhelmed. Try to relax. 🌿</p>}
+{emotion === "Scared 😱" && <p className="warning">You're safe. Face your fears with courage! 💪</p>}
+{emotion === "Frustrated 😤" && <p className="warning">Take a break. Clear your mind. 🕊️</p>}
+{emotion === "Confused 🤔" && <p className="warning">It's okay to ask for help. You're not alone! 🫂</p>}
+{emotion === "Angry 😠" && <p className="warning">Take deep breaths. Calmness brings clarity. 🌊</p>}
+{emotion === "Tired 😴" && <p className="warning">Rest is important. Recharge and come back stronger! 💆‍♂️</p>}
+{emotion === "Happy 😀" && <p className="positive">Great to see you happy! Keep smiling! 😊</p>}
+{emotion === "Excited 🤩" && <p className="positive">Your enthusiasm is inspiring! Keep it up! 🚀</p>}
+{emotion === "Neutral 😐" && <p className="info">Stay balanced and keep moving forward. ⚖️</p>}
+
       </div>
     </div>
   );
