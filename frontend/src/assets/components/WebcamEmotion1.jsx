@@ -48,6 +48,7 @@ const WebcamEmotion = ({ onEmotionDetect }) => {
 {emotion === "Anxious 🤯" && <p className="warning">It's okay to feel overwhelmed. Try to relax. 🌿</p>}
 {emotion === "Scared 😱" && <p className="warning">You're safe. Face your fears with courage! 💪</p>}
 {emotion === "Frustrated 😤" && <p className="warning">Take a break. Clear your mind. 🕊️</p>}
+{emotion === "Happy 😃" && <p className="success">Great to see you smiling! Keep spreading positivity! 🌟</p>}
 {emotion === "Confused 🤔" && <p className="warning">It's okay to ask for help. You're not alone! 🫂</p>}
 {emotion === "Angry 😠" && <p className="warning">Take deep breaths. Calmness brings clarity. 🌊</p>}
 {emotion === "Tired 😴" && <p className="warning">Rest is important. Recharge and come back stronger! 💆‍♂️</p>}

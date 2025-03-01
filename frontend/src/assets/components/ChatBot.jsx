@@ -1,100 +1,76 @@
-// import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-// const Chatbot = ({ emotion }) => {
-//   const [messages, setMessages] = useState([
-//     { sender: "bot", text: "Hello! I'm here to help. 😊" }
-//   ]);
-//   const [input, setInput] = useState("");
-
-//   // Predefined responses based on emotion
-//   const handleEmotionResponse = () => {
-//     if (emotion === "Stressed 😟" || emotion === "Sad 😢") {
-//       setMessages([...messages, { sender: "bot", text: "Take a deep breath! You're doing great. 💙" }]);
-//     }
-//   };
-
-//   // Handle user input
-//   const handleSendMessage = () => {
-//     if (input.trim() !== "") {
-//       setMessages([...messages, { sender: "user", text: input }]);
-//       setInput("");
-      
-//       // Simulate bot response
-//       setTimeout(() => {
-//         setMessages((prevMessages) => [
-//           ...prevMessages,
-//           { sender: "bot", text: "I understand. Stay positive! 😊" }
-//         ]);
-//       }, 1000);
-//     }
-//   };
-
-//   return (
-//     <div className="chatbot-container">
-//       <h3>Chatbot Support</h3>
-//       <div className="chatbox">
-//         {messages.map((msg, index) => (
-//           <p key={index} className={msg.sender}>
-//             <strong>{msg.sender === "bot" ? "🤖 Bot: " : "🙋 You: "}</strong>
-//             {msg.text}
-//           </p>
-//         ))}
-//       </div>
-//       <input
-//         type="text"
-//         value={input}
-//         onChange={(e) => setInput(e.target.value)}
-//         placeholder="Type your message..."
-//       />
-//       <button onClick={handleSendMessage}>Send</button>
-      
-//       {/* Trigger chatbot response based on detected emotion */}
-//       <button onClick={handleEmotionResponse} className="emotion-btn">
-//         Emotion Response
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default Chatbot;
-
-import React, { useState } from "react";
-import { getAIResponse } from "../../utils/gemeniApi";
-
-const ChatBot = ({ emotion }) => {
+const ChatBot = () => {
   const [messages, setMessages] = useState([
-    { sender: "bot", text: "Hello! How are you feeling today?" }
+    { sender: "bot", text: "Hello! 😊 How can I assist you today?" }
   ]);
   const [input, setInput] = useState("");
+  const chatRef = useRef(null);
 
-  const sendMessage = async () => {
-    if (input.trim() === "") return;
+  // Function to generate responses
+  const getBotResponse = (userMessage) => {
+    userMessage = userMessage.toLowerCase();
 
-    const userMessage = { sender: "user", text: input };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-
-    const botReply = await getAIResponse(input);
-    setMessages((prev) => [...prev, { sender: "bot", text: botReply }]);
+    if (userMessage.includes("hello") || userMessage.includes("hi")) {
+      return "Hello! 😊 How can I assist you today?";
+    } 
+    else if (userMessage.includes("how are you")) {
+      return "I'm just a chatbot, but I'm here to make your day better! 🌟 How are you feeling?";
+    } 
+    else if (userMessage.includes("sad") || userMessage.includes("stressed")) {
+      return "I'm sorry to hear that. 💙 Want to talk about it?";
+    } 
+    else if (userMessage.includes("happy") || userMessage.includes("great")) {
+      return "That's awesome! 😃 Keep up the positive vibes!";
+    } 
+    else if (userMessage.includes("thank you")) {
+      return "You're very welcome! 💖 Always here to help.";
+    } 
+    else {
+      return "I'm here to chat! Tell me how you're feeling. 💬";
+    }
   };
 
+  // Handle sending message
+  const sendMessage = () => {
+    if (input.trim() === "") return;
+
+    const newMessage = { sender: "user", text: input };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setInput("");
+
+    setTimeout(() => {
+      const botResponse = getBotResponse(input);
+      setMessages((prevMessages) => [...prevMessages, { sender: "bot", text: botResponse }]);
+    }, 1000); // Delay for bot response
+  };
+
+  // Scroll to latest message
+  useEffect(() => {
+    chatRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
-    <div className="chatbot-container">
-      <div className="chatbox">
+    <div className="chat-container">
+      <div className="chat-box">
         {messages.map((msg, index) => (
-          <p key={index} className={msg.sender === "bot" ? "bot-message" : "user-message"}>
-            {msg.text}
-          </p>
+          <div key={index} className={`chat-message ${msg.sender}`}>
+            <p>{msg.text}</p>
+          </div>
         ))}
+        <div ref={chatRef}></div>
       </div>
 
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Type your message..."
-      />
-      <button onClick={sendMessage}>Send</button>
+      <div className="chat-input">
+        <input
+          type="text"
+          placeholder="Type a message..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+        />
+        <button onClick={sendMessage}>Send</button>
+      </div>
     </div>
   );
 };
